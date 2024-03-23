@@ -1,9 +1,18 @@
-{
-  "id": "5ce90e2b-2ceb-45a5-888d-7e755f8c1a3c",
-  "firstName": "John",
-  "lastName": "Smith",
-  "username": "john.smith82",
-  "email": "john.smith82@gmail.com",
-  "password": "1234",
-  "age": 35
-}
+[
+  {
+    "id": "5ce90e2b-2ceb-45a5-888d-7e755f8c1a3c",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@email.com",
+    "password": "12345678",
+    "role": "Admin"
+  },
+  {
+    "id": "385858fc-01b1-4d6b-a5c4-15fb25a6bc9f",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@email.com",
+    "password": "12345678",
+    "role": "User"
+  }
+]
