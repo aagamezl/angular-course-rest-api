@@ -5,6 +5,9 @@
     "lastName": "Doe",
     "email": "john.doe@email.com",
     "password": "12345678",
+    "accounts": [
+      "7856 84 297 26"
+    ],
     "role": "Admin"
   },
   {
@@ -13,6 +16,9 @@
     "lastName": "Doe",
     "email": "jane.doe@email.com",
     "password": "12345678",
+    "accounts": [
+      "8337 33 566 44"
+    ],
     "role": "User"
   }
 ]

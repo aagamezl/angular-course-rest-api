@@ -13,8 +13,4 @@ router.get('/transactions', controller.getAll)
 
 router.get('/transactions/:id', validate(validations.getById), controller.getById)
 
-router.delete('/transactions/:id', validate(validations.delete), controller.deleteById)
-
-router.patch('/transactions/:id', validate(validations.update), controller.update)
-
 export default router

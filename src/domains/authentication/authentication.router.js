@@ -7,6 +7,8 @@ import validations from './authentication.validation.js'
 
 const router = express.Router({ strict: true })
 
+router.get('/check-signin', controller.checkSignin)
+
 router.post('/signin', validate(validations.signin), controller.signin)
 
 router.post('/signup', validate(validations.signup), controller.signup)

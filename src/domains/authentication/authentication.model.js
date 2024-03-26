@@ -9,6 +9,36 @@ import writeJson from '../../utils/writeJson.js';
 
 const COLLECTION_PATH = join(config.database.path, 'users.json')
 
+const getRandomAccount = () => {
+  const digits = '123456789'; // Digits for generating account number
+  let accountNumber = '';
+
+  // First chunk with 4 digits
+  for (let i = 0; i < 4; i++) {
+    accountNumber += digits[Math.floor(Math.random() * digits.length)];
+  }
+  accountNumber += ' '; // Add a space after the first chunk
+
+  // Second chunk with 2 digits
+  for (let i = 0; i < 2; i++) {
+    accountNumber += digits[Math.floor(Math.random() * digits.length)];
+  }
+  accountNumber += ' '; // Add a space after the second chunk
+
+  // Third chunk with 3 digits
+  for (let i = 0; i < 3; i++) {
+    accountNumber += digits[Math.floor(Math.random() * digits.length)];
+  }
+  accountNumber += ' '; // Add a space after the third chunk
+
+  // Fourth chunk with 2 digits
+  for (let i = 0; i < 2; i++) {
+    accountNumber += digits[Math.floor(Math.random() * digits.length)];
+  }
+
+  return accountNumber;
+}
+
 const signin = async (email, password) => {
   const users = await readJson(COLLECTION_PATH)
 
@@ -37,12 +67,17 @@ const signup = async (payload) => {
 
   users.push({
     id,
-    ...payload
+    ...payload,
+    accounts: [
+      getRandomAccount()
+    ]
   })
 
   await writeJson(COLLECTION_PATH, users)
 
-  return signToken({ id, email: payload.email })
+  const { authentication: { secretKey } } = config
+
+  return signToken({ id, email: payload.email }, secretKey)
 }
 
 const model = {

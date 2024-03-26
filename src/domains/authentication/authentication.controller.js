@@ -8,6 +8,16 @@ import model from './authentication.model.js'
  * @param {import('express').Request} req The Express.js request object
  * @param {import('express').Response} res The Express.js response object
  */
+const checkSignin = (req, res) => {
+  res.status(StatusCodes.OK).json({ loggedIn: true })
+}
+
+/**
+ * Create a new resource.
+ *
+ * @param {import('express').Request} req The Express.js request object
+ * @param {import('express').Response} res The Express.js response object
+ */
 const signin = async (req, res) => {
   try {
     const { email, password } = req.body
@@ -56,6 +66,7 @@ const signup = async (req, res) => {
 }
 
 const controller = {
+  checkSignin,
   signin,
   signup
 }

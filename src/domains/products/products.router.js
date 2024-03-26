@@ -24,13 +24,13 @@ router.post('/products', async (req, res) => {
   }
   data.push(newProduct)
 
-  await writeJsonFile(join(COLLECTION_PATH, 'products.json'), data)
+  await writeJsonFile(join(COLLECTION_PATH), data)
 
   res.status(StatusCodes.CREATED).json(newProduct)
 })
 
 router.get('/products/:id', async (req, res) => {
-  const products = await readJson(join(COLLECTION_PATH, 'products.json'))
+  const products = await readJson(join(COLLECTION_PATH))
   const product = products.find(item => item.id === req.params.id)
   console.log(product);
 
