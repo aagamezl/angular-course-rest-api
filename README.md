@@ -118,3 +118,13 @@ this.http.get('http://localhost:3000/users/profile', { headers })
     // Handle the response
   });
 ```
+
+## Configuration
+
+Create a `.env` in the root folder with the next values:
+
+```
+PORT=3000
+HOSTNAME=localhost
+DATABASE_NAME=database
+```
