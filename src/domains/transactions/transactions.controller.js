@@ -12,15 +12,19 @@ const create = async (req, res) => {
   try {
     const todo = await model.create(req.body)
 
-    res.status(StatusCodes.OK).json(todo)
+    return res.status(StatusCodes.CREATED).json(todo)
   } catch (error) {
     console.log(error)
 
-    if (ERRORS[error.message]) {
-      res.status(StatusCodes.BAD_REQUEST).json(ERRORS[error.message])
+    if (error.message.includes(model.JSON_PROBLEM_MARKER)) {
+      const jsonProblem = error.message
+        .replace(`${model.JSON_PROBLEM_MARKER}: `, '')
+        .replace('{PATH}', req.path)
+
+      return res.status(StatusCodes.BAD_REQUEST).json(JSON.parse(jsonProblem))
     }
 
-    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
   }
 }
 
@@ -57,6 +61,8 @@ const getById = async (req, res) => {
 
     res.status(StatusCodes.OK).json(todo)
   } catch (error) {
+    console.error(error)
+
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
   }
 }

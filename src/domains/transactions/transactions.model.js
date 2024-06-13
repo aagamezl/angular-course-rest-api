@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 
 import { v4 as uuidv4 } from 'uuid';
+import { StatusCodes } from 'http-status-codes'
 
 import config from '../../config.js';
 import readJson from '../../utils/readJson.js';
@@ -9,15 +10,19 @@ import writeJson from '../../utils/writeJson.js';
 const COLLECTION_PATH = join(config.database.path, 'transactions.json')
 
 const ERRORS = {
-  'TR0001': (balance, amount) => {
+  'insufficient-funds': (balance, amount) => {
     return {
       type: 'https://example.com/problems/insufficient-funds',
-      title: 'Duplicate user',
-      details: `Your current balance is ${balance}, but that costs ${amount}.`,
-      instance: req.path
+      title: 'Insufficient Funds',
+      status: StatusCodes.BAD_REQUEST,
+      details: `Your current balance is ${balance}, but the transaction amount is ${amount}.`,
+      balance: balance,
+      instance: '{PATH}'
     }
   }
 }
+
+const JSON_PROBLEM_MARKER = 'JSON_PROBLEM'
 
 const create = async (payload) => {
   const transactions = await readJson(COLLECTION_PATH)
@@ -25,8 +30,7 @@ const create = async (payload) => {
   const balance = transactions.at(-1).balance
 
   if (payload.amount > balance) {
-    throw new Error('TR0001')
-
+    throw new Error(`${JSON_PROBLEM_MARKER}: ${JSON.stringify(ERRORS['insufficient-funds'](balance, payload.amount))}`)
   }
 
   const transaction = {
@@ -38,14 +42,14 @@ const create = async (payload) => {
 
   transactions.push(transaction)
 
-  await writeJson(DATABASE_PATH, transactions)
+  await writeJson(COLLECTION_PATH, transactions)
 
-  return payload
+  return transaction
 }
 
 const deleteById = async (id) => {
   /** @type {Array} */
-  const transactions = await readJson(DATABASE_PATH)
+  const transactions = await readJson(COLLECTION_PATH)
 
   const index = transactions.findIndex(todo => todo.id === id)
 
@@ -55,7 +59,7 @@ const deleteById = async (id) => {
 
   transactions.splice(index, 1)
 
-  await writeFile(DATABASE_PATH, JSON.stringify(transactions, null, 2))
+  await writeFile(COLLECTION_PATH, JSON.stringify(transactions, null, 2))
 
   return true
 }
@@ -65,11 +69,11 @@ const getAll = async () => {
 }
 
 const getById = async (id) => {
-  return (await readJson(DATABASE_PATH)).find(todo => todo.id === id)
+  return (await readJson(COLLECTION_PATH)).find(todo => todo.id === id)
 }
 
 const update = async (id, payload) => {
-  const transactions = await readJson(DATABASE_PATH)
+  const transactions = await readJson(COLLECTION_PATH)
 
   const index = transactions.findIndex(todo => todo.id === id)
 
@@ -89,7 +93,9 @@ const model = {
   deleteById,
   getAll,
   getById,
-  update
+  update,
+  ERRORS,
+  JSON_PROBLEM_MARKER
 }
 
 export default model

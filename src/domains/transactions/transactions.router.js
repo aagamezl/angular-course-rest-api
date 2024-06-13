@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { validate } from '../../middlewares/index.js'
+import { validate } from '../../utils/middlewares/index.js'
 
 import controller from './transactions.controller.js'
 import { validations } from './transactions.validation.js'

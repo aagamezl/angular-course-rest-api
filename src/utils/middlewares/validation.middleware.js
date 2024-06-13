@@ -2,8 +2,8 @@ import { FormatRegistry } from '@sinclair/typebox/type'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { Errors } from '@sinclair/typebox/errors'
 
-import { REQUEST_SEGMENTS } from '../utils/index.js'
-import { isEmail, isUuid } from '../validations/formatters/index.js'
+import { REQUEST_SEGMENTS } from '../index.js'
+import { isEmail, isUuid } from '../../validations/formatters/index.js'
 
 // Register TypeBox curtom formatter
 FormatRegistry.Set('uuid', isUuid)
